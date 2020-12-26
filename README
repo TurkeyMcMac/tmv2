@@ -6,3 +6,6 @@ as much. If you want more information, you can run 'make', then run './tmv2 -h'
 for an overview or 'man ./tmv2.6' for more in-depth information. It is also
 possible to just view the file 'tmv2.6.in' to read the same information without
 needing to run 'make' beforehand.
+
+Several files are provided in the 'examples' directory with which you can try
+out the command.
