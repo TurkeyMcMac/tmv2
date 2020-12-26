@@ -1,0 +1,8 @@
+This is an improved version of my other program 'termovie'. The input format is
+almost compatible, but there can be no final frame separator after the final
+frame. Unlike 'termovie', 'tmv2' uses the terminfo database rather than printing
+hardcoded control sequences. It's also a bit simpler since it doesn't try to do
+as much. If you want more information, you can run 'make', then run './tmv2 -h'
+for an overview or 'man ./tmv2.6' for more in-depth information. It is also
+possible to just view the file 'tmv2.6.in' to read the same information without
+needing to run 'make' beforehand.
