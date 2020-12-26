@@ -14,4 +14,6 @@ To install this program, run something like this:
 
    make OPTIMIZATION=-O3
    sudo cp tmv2 <directory-in-path>
-   sudo cp tmv2.6.gz <directory-in-man-path>
+   sudo cp tmv2.6.gz <man-directory>
+
+<man-directory> might be '/usr/share/man/man6/', for example.
