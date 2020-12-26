@@ -17,7 +17,7 @@
 
 static void print_version(const char *progname)
 {
-	printf("%s version 0.0.2\n", progname);
+	printf("%s version 0.1.0\n", progname);
 }
 
 static void print_help(const char *progname)
@@ -74,20 +74,20 @@ static void set_usec(struct timeval *tv, unsigned long usec)
 	tv->tv_usec = (suseconds_t)(usec % 1000000);
 }
 
-// Erases the last n_lines lines by going up and clearing to the bottom.
+// Erases the last n_lines lines including the current line and moves up to the
+// highest erased line.
 static void move_cursor_upward_and_clear(long n_lines)
 {
 	if (n_lines > 0) {
-		// Make sure to clear the entire current line:
+		// Make sure to clear entire lines:
 		putchar('\r');
-		// The extra parameters are apparently a quirk of the interface:
-		const char *uc = tparm(parm_up_cursor, n_lines,
-			0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
-		// I don't know whether tparm can fail or not:
-		if (uc) putp(uc);
+		// Clear n_lines lines including the current line:
+		putp(clr_eol);
+		while (--n_lines > 0) {
+			putp(cursor_up);
+			putp(clr_eol);
+		}
 	}
-	// Clear to the end of the screen:
-	putp(clr_eos);
 }
 
 // Turns the cursor back to normal and exits with the status.
@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "%s: setupterm() failed\n", progname);
 		exit(EXIT_FAILURE);
 	}
-	// Ensure require capabilities are present:
-	if (!clr_eos || !parm_up_cursor) {
-		fprintf(stderr, "%s: Need ed and cuu terminfo capabilities\n",
+	// Ensure required capabilities are present:
+	if (!clr_eol || !cursor_up) {
+		fprintf(stderr, "%s: Need el and cuu1 terminfo capabilities\n",
 			progname);
 		exit(EXIT_FAILURE);
 	}
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 	// frame_height is the number of lines in the printing frame:
 	long frame_height = 0;
 	do {
-		// Clear the "canvas". frame_height may be > 0 next iteration:
+		// frame_height may be > 0 after the first iteration:
 		move_cursor_upward_and_clear(frame_height);
 		// Reset frame_height to accumulate with the new frame:
 		frame_height = 0;
@@ -256,13 +256,13 @@ int main(int argc, char *argv[])
 				move_cursor_upward_and_clear(frame_height);
 				frame_height = 0;
 			} else {
+				// Move down for following lines:
+				if (frame_height > 0) fputc('\n', stdout);
 				// This means there's another line to draw.
 				// Make sure to start at the terminal's start:
 				fputc('\r', stdout);
 				// Print the line:
 				fwrite(line, 1, line_len, stdout);
-				// Move down:
-				fputc('\n', stdout);
 				// Accumulate the height, ignoring stuff over
 				// INT_MAX, which is huge:
 				if (frame_height < INT_MAX) ++frame_height;
