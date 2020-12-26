@@ -20,7 +20,7 @@
 
 static void print_version(const char *progname)
 {
-	printf("%s version 0.1.2\n", progname);
+	printf("%s version "VERSION"\n", progname);
 }
 
 static void print_help(const char *progname)
