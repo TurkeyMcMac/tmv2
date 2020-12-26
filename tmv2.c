@@ -205,8 +205,10 @@ int main(int argc, char *argv[])
 	if (cursor_invisible && cursor_normal)
 		putp(cursor_invisible);
 	// Catch common termination signals:
-	struct sigaction sa = { 0 };
+	struct sigaction sa;
 	sa.sa_handler = termination_handler;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
 	sigaction(SIGTERM, &sa, NULL);
 	sigaction(SIGINT, &sa, NULL);
 	// Block SIGALRM; it's caught using sigwait(3).
