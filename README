@@ -10,7 +10,11 @@ needing to run 'make' beforehand.
 Several files are provided in the 'examples' directory with which you can try
 out the command.
 
-To install this program, run something like this:
+If you have Homebrew, you may be able to install this program as follows:
+
+   brew install turkeymcmac/tap/tmv2
+
+Otherwise, you could run something like this:
 
    make OPTIMIZATION=-O3
    sudo cp tmv2 <directory-in-path>
