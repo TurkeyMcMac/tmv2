@@ -8,11 +8,17 @@ LDLIBS = -lcurses
 RM = rm -f
 
 .PHONY: all
-all: tmv2
+all: tmv2 tmv2.6.gz
 
 tmv2: tmv2.c Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LDLIBS)
 
+tmv2.6.gz: tmv2.6
+	gzip < $< > $@
+
+tmv2.6: tmv2.6.in
+	sed 's/@@VERSION@@/$(VERSION)/g' $< > $@
+
 .PHONY: clean
 clean:
-	$(RM) tmv2
+	$(RM) tmv2 tmv2.6.gz tmv2.6
