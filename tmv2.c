@@ -17,7 +17,7 @@
 
 static void print_version(const char *progname)
 {
-	printf("%s version 0.0.1\n", progname);
+	printf("%s version 0.0.2\n", progname);
 }
 
 static void print_help(const char *progname)
@@ -75,12 +75,12 @@ static void set_usec(struct timeval *tv, unsigned long usec)
 }
 
 // Erases the last n_lines lines by going up and clearing to the bottom.
-static void move_cursor_upward_and_clear(int n_lines)
+static void move_cursor_upward_and_clear(long n_lines)
 {
 	if (n_lines > 0) {
 		// Make sure to clear the entire current line:
 		putchar('\r');
-		// The extra parameters are apperently a quirk of the interface:
+		// The extra parameters are apparently a quirk of the interface:
 		const char *uc = tparm(parm_up_cursor, n_lines,
 			0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
 		// I don't know whether tparm can fail or not:
