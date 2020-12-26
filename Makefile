@@ -16,7 +16,7 @@ tmv2: tmv2.c Makefile
 tmv2.6.gz: tmv2.6
 	gzip < $< > $@
 
-tmv2.6: tmv2.6.in
+tmv2.6: tmv2.6.in Makefile
 	sed 's/@@VERSION@@/$(VERSION)/g' $< > $@
 
 .PHONY: clean
