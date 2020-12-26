@@ -9,6 +9,9 @@
 #include <term.h>
 #include <unistd.h>
 
+// Default minimum delay between frames, measured in milliseconds.
+#define DEFAULT_DELAY_MS 100UL
+
 // Maximum minimum delay between frames, measured in milliseconds.
 #define MAX_DELAY_MS 2100000UL
 
@@ -17,7 +20,7 @@
 
 static void print_version(const char *progname)
 {
-	printf("%s version 0.1.1\n", progname);
+	printf("%s version 0.1.2\n", progname);
 }
 
 static void print_help(const char *progname)
@@ -27,7 +30,9 @@ Usage: %s [options] [--] [input-file]\n\
 Options:\n\
  -d delay  Delay a minimum of the given number of milliseconds between\n\
            frames. The program may wait longer if it takes too long to read\n\
-	   or write a frame. The maximum delay is %lu.\n\
+           or write a frame. Keep in mind that some terminals require a pause\n\
+           after printing a control sequence. The default delay is %lu. The\n\
+           maximum delay is %lu.\n\
  -l        Loop the animation. This requires that the input file be seekable.\n\
            (This usually excludes stdin.)\n\
  -L        Do not loop. This is the default.\n\
@@ -36,7 +41,7 @@ Options:\n\
 If the input file is not given or the string is '-', stdin is read from to\n\
 show the movie. Otherwise, the movie is read from the named file. Only one\n\
 input argument can be given, at most.\n\
-", progname, MAX_DELAY_MS);
+", progname, DEFAULT_DELAY_MS, MAX_DELAY_MS);
 }
 
 // Like getline(3) but without the NUL or newline. May have to check feof(3).
@@ -114,7 +119,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	// Parse command-line arguments:
-	unsigned long delay_ms = 100;
+	unsigned long delay_ms = DEFAULT_DELAY_MS;
 	bool loop = false;
 	const char *movie_filename = "-"; // Use stdin ("-") by default.
 	int opt;
