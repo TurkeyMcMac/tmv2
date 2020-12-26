@@ -17,7 +17,7 @@
 
 static void print_version(const char *progname)
 {
-	printf("%s version 0.1.0\n", progname);
+	printf("%s version 0.1.1\n", progname);
 }
 
 static void print_help(const char *progname)
@@ -64,14 +64,6 @@ error:
 	*cap = 0;
 	*buf = NULL;
 	return -1;
-}
-
-// Sets tv to a duration in seconds and microseconds equal to the given duration
-// measured in just microseconds.
-static void set_usec(struct timeval *tv, unsigned long usec)
-{
-	tv->tv_sec = (time_t)(usec / 1000000);
-	tv->tv_usec = (suseconds_t)(usec % 1000000);
 }
 
 // Erases the last n_lines lines including the current line and moves up to the
@@ -198,9 +190,13 @@ int main(int argc, char *argv[])
 	// Set up the interval timer:
 	// Always have a bit of delay so as not to deactivate the itimer:
 	unsigned long delay_us = delay_ms > 0 ? delay_ms * 1000 : 1;
-	struct itimerval timerval;
-	set_usec(&timerval.it_interval, delay_us);
-	set_usec(&timerval.it_value, delay_us);
+	struct itimerval timerval = {
+		.it_interval = {
+			.tv_sec = (time_t)(delay_us / 1000000),
+			.tv_usec = (suseconds_t)(delay_us % 1000000),
+		},
+	};
+	timerval.it_value = timerval.it_interval;
 	setitimer(ITIMER_REAL, &timerval, NULL);
 	// frame_height is the number of lines in the printing frame:
 	long frame_height = 0;
