@@ -45,6 +45,7 @@ Print version information and exit.
 
 .P
 Consider a file 'countdown.tmv' containing this text:
+.\" FIXME: Is there a better way to preformat this text?
 .P
 .PD 0
 ~
