@@ -25,41 +25,56 @@
 
 .SH NAME
 
-tmv2 - Play ASCII-art movies in a terminal window
+.B tmv2
+\- Play ASCII-art movies in a terminal window
 
 
 .SH SYNOPSIS
 
-\fBtmv2\fR [\fIoptions\fR] [--] [\fIinput-file\fR]
+.B tmv2
+[
+.I options
+] [--] [
+.I input-file
+]
 
 
 .SH DESCRIPTION
 
-\fBtmv2\fR reads a movie and plays the frames one-by-one. If \fIinput-file\fR is
-not given or is '-', stdin is read from to show the movie. Otherwise, the movie
-is read from the named file. Only one \fIinput-file\fR can be given, at most.
+.B tmv2
+reads a movie and plays the frames one-by-one. If
+.I input-file
+is not given or is '\-', stdin is read from to show the movie. Otherwise, the
+movie is read from the named file. Only one
+.I input-file
+can be given, at most.
 .P
-See the \fBEXAMPLE\fR section for a usage example.
+See the
+.B EXAMPLE
+section for a usage example.
 .P
-See the \fBDETAILED DESCRIPTION\fR section for parsing/displaying specification
-of sorts.
+See the
+.B DETAILED DESCRIPTION
+section for parsing/displaying specification of sorts.
 
 
 .SH OPTIONS
 
-.IP "\fB-d\fR \fIdelay\fR"
-Delay a minimum of \fIdelay\fR milliseconds between frames. The program may wait
-longer if it takes too long to read or write a frame. Keep in mind that some
-terminals require a pause after printing a control sequence. The default delay
-is 100 milliseconds. The maximum delay is a very large number of milliseconds.
-.IP \fB-l\fR
+.IP "-d delay"
+Delay a minimum of
+.I delay
+milliseconds between frames. The program may wait longer if it takes too long to
+read or write a frame. Keep in mind that some terminals require a pause after
+printing a control sequence. The default delay is 100 milliseconds. The maximum
+delay is a very large number of milliseconds.
+.IP -l
 Loop the animation until interrupted. This requires that the input file be
 seekable. (This usually excludes stdin as an input source.)
-.IP \fB-L\fR
+.IP -L
 Stop animating after the last frame. This is the default.
-.IP \fB-h\fR
+.IP -h
 Print help information and exit.
-.IP \fB-v\fR
+.IP -v
 Print version information and exit.
 
 
@@ -67,85 +82,113 @@ Print version information and exit.
 
 .P
 Consider a file 'countdown.tmv' containing this text:
-.\" FIXME: Is there a better way to preformat this text?
 .P
-.PD 0
 ~
-.P
-    5
-.P
+.br
+\ \ \ \ 5
+.br
 -_-
-.P
+.br
 ~
-.P
-    4
-.P
+.br
+\ \ \ \ 4
+.br
 -_-
-.P
+.br
 ~
-.P
-    3
-.P
+.br
+\ \ \ \ 3
+.br
 -_-
-.P
+.br
 ~
-.P
-    2
-.P
+.br
+\ \ \ \ 2
+.br
 -_-
-.P
+.br
 ~
-.P
-    1
-.P
+.br
+\ \ \ \ 1
+.br
 -_-
-.P
+.br
 ~
-.P
-_ _ 0
-.P
+.br
+_\ _\ 0
+.br
 0_0
-.PD
 .P
 Each frame is introduced by a '~' line. This could be any other text, as
-\fBtmv2\fR uses whatever the first line is to separate frames. The command 'tmv2
--d1000 countdown.tmv' would play this animation nicely.
+.B tmv2
+uses whatever the first line is to separate frames. The command 'tmv2 -d1000
+countdown.tmv' would play this animation nicely.
 
 
 .SH "DETAILED DESCRIPTION"
 
 The input is a series of octets encoding ASCII. It is parsed as a series of
-lines. A line has two forms. The first form is zero or more \fIcontent octets\fR
-followed by a line feed octet. The second for is one or more \fIcontent
-octets\fR followed by the end of the input. In both cases, the \fIcontent
-octets\fR are a sequence of octets not containing a line feed octet.
+lines. A line has two forms. The first form is zero or more
+.I content octets
+followed by a line feed octet. The second for is one or more
+.I content octets
+followed by the end of the input. In both cases, the
+.I content octets
+are a sequence of octets not containing a line feed octet.
 .P
 As a special case, if the input contains zero octets, it has one line whose
-\fIcontent octets\fR form a sequence of length zero.
+.I content octets
+form a sequence of length zero.
 .P
-The first line of input is the \fIframe separator\fR. All the lines, including
-the first, are parsed as a series of one or more \fIframes\fR. A \fIframe\fR of
-input consists of one line for which the \fIcontent octets\fR match exactly
-those of the \fIframe separator\fR, followed by zero or more \fIcontent
-lines\fR. Each line of the sequence of \fIcontent lines\fR satisfies the
-condition that its \fIcontent octets\fR do not match the \fIcontent octets\fR of
-the \fIframe separator\fR.
+The first line of input is the
+.IR "frame separator" .
+All the lines, including the first, are parsed as a series of one or more
+.IR frames .
+A
+.I frame
+of input consists of one line for which the
+.I content octets
+match exactly those of the
+.IR "frame separator" ,
+followed by zero or more
+.IR "content lines" .
+Each line of the sequence of
+.I content lines
+satisfies the condition that its
+.I content octets
+do not match the
+.I content octets
+of the
+.IR "frame separator" .
 .P
-The sequence of \fIframes\fR is displayed on the terminal one-by-one with some
-amount of delay between displays. To display a \fIframe\fR, each of its
-\fIcontent lines\fR is written verbatim to the terminal in sequence. Before
-writing the first line, the output cursor is moved to the left edge of the
-terminal. Between writing two adjacent lines of the \fIframe\fR, the output
-cursor is moved down one cell and to the left edge of the terminal. Between
-writing two adjacent \fIframes\fR, the cursor moves to the left edge and up a
-number of cells, erasing each terminal line it moves onto in the process. The
-number of cells is equal to the number of \fIcontent lines\fR in the prior
-\fIframe\fR.
+The sequence of
+.I frames
+is displayed on the terminal one-by-one with some amount of delay between
+displays. To display a
+.IR frame ,
+each of its
+.I content lines
+is written verbatim to the terminal in sequence. Before writing the first line,
+the output cursor is moved to the left edge of the terminal. Between writing two
+adjacent lines of the
+.IR frame ,
+the output cursor is moved down one cell and to the left edge of the terminal.
+Between writing two adjacent
+.IR frames ,
+the cursor moves to the left edge and up a number of cells, erasing each
+terminal line it moves onto in the process. The number of cells is equal to the
+number of
+.I content lines
+in the prior
+.IR frame .
 
 
 .SH EXIT STATUS
 
-On success, \fBtmv2\fR exits with status 0. If a fatal error occurs, \fBtmv2\fR
+On success,
+.B tmv2
+exits with status 0. If a fatal error occurs,
+.B tmv2
 exits with a nonzero status.
 
 
