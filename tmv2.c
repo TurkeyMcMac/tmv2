@@ -37,7 +37,7 @@ Options:\n\
            (This usually excludes stdin.)\n\
  -L        Do not loop. This is the default.\n\
  -h        Print this help.\n\
- -v        Print program version\n\
+ -v        Print program version.\n\
 If the input file is not given or the string is '-', stdin is read from to\n\
 show the movie. Otherwise, the movie is read from the named file. Only one\n\
 input argument can be given, at most.\n\

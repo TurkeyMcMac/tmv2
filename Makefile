@@ -1,4 +1,4 @@
-VERSION = 0.1.2
+VERSION = 0.1.3
 CC = cc
 CFLAGS = -Wall -Wextra -std=c99 -D_POSIX_C_SOURCE=200112L\
  -DVERSION='"$(VERSION)"'
