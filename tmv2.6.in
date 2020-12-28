@@ -32,11 +32,9 @@
 .SH SYNOPSIS
 
 .B tmv2
-[
-.I options
-] [--] [
-.I input-file
-]
+.RI [ options ]
+[--]
+.RI [ input-file ]
 
 
 .SH DESCRIPTION
