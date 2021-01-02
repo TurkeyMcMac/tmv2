@@ -122,7 +122,9 @@ static volatile sig_atomic_t signal_terminated = false;
 static void termination_handler(int signum)
 {
 	signal_terminated = true;
-	return (void)signum; // (This argument is unused.)
+#ifdef __GNUC__
+	__attribute__((unused)) int unused = signum;
+#endif
 }
 
 int main(int argc, char *argv[])
