@@ -121,10 +121,12 @@ static void restore_and_exit(int status)
 static volatile sig_atomic_t signal_terminated = false;
 static void termination_handler(int signum)
 {
-	signal_terminated = true;
+	// Make (almost) sure that the compiler doesn't emit an unused warning:
+	(void)signum;
 #ifdef __GNUC__
 	__attribute__((unused)) int unused = signum;
 #endif
+	signal_terminated = true;
 }
 
 int main(int argc, char *argv[])
