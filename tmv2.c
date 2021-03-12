@@ -290,11 +290,9 @@ int main(int argc, char *argv[])
 				move_cursor_upward_and_clear(frame_height);
 				frame_height = 0;
 			} else {
-				// Move down for following lines:
+				// This means a content line was found.
+				// Separate lines:
 				if (frame_height > 0) fputc('\n', stdout);
-				// This means there's another line to draw.
-				// Make sure to start at the terminal's start:
-				fputc('\r', stdout);
 				// Print the line:
 				fwrite(line, 1, line_len, stdout);
 				// Accumulate the height, ignoring stuff over
